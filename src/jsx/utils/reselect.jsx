@@ -12,12 +12,12 @@ const withState = (...inputs) => {
 
 const withProps = (...inputs) => () => withState(...inputs)();
 
-const mapStateToProps = observables => {
-  observables = Object.keys(observables).reduce((map, key) => Object.assign({}, map, {
+const mapStateToProps = observables => () => {
+  const instances = Object.keys(observables).reduce((map, key) => Object.assign({}, map, {
     [key] : observables[key]()
   }), {});
-  return (state, props) => Object.keys(observables).reduce((map, key) => Object.assign({}, map, {
-    [key] : props[key] || observables[key](state, props)
+  return (state, props) => Object.keys(instances).reduce((map, key) => Object.assign({}, map, {
+    [key] : props[key] || instances[key](state, props)
   }), {});
 };
 
