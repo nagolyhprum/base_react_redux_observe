@@ -1,16 +1,16 @@
 import { createSelector } from "reselect";
 import { BehaviorSubject } from "rx";
 
-const withState = (...inputs) => {
+const withState = input => {
   const subject$ = new BehaviorSubject();
-  const selector = createSelector(inputs, input => {
-    setTimeout(() => subject$.onNext(input));
+  const selector = createSelector(input, value => {
+    setTimeout(() => subject$.onNext(value));
     return subject$;
   });
   return () => selector;
 };
 
-const withProps = (...inputs) => () => withState(...inputs)();
+const withProps = input => () => withState(input)();
 
 const mapStateToProps = observables => () => {
   const instances = Object.keys(observables).reduce((map, key) => Object.assign({}, map, {
